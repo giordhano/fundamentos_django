@@ -33,6 +33,7 @@ settings.configure(
 
 from django import forms
 from django.conf.urls import url
+from django.core.cache import cache
 from django.http import HttpResponse,HttpResponseBadRequest
 
 from io import BytesIO
@@ -48,21 +49,28 @@ class ImageForm(forms.Form):
 
         height = self.cleaned_data['height']
         width = self.cleaned_data['width']
-        image = Image.new('RGB',(width,height))
-        draw = ImageDraw.Draw(image)
+        key = '{}.{}.{}'.format(width, height, image_format)
+        content = cache.get(key)
 
-        text = '{} X {}'.format(width,height)
+        if content is None:
+            print('imagen generada')
+            image = Image.new('RGB',(width,height))
+            draw = ImageDraw.Draw(image)
+            text = '{} X {}'.format(width,height)
 
-        textwidth,textheight = draw.textsize(text)
+            textwidth,textheight = draw.textsize(text)
 
-        if textwidth < width and textheight < height:
-            texttop = (height - textheight) // 2
-            textleft = (width - textwidth) // 2
-            draw.text((textleft, texttop), text, fill = (255,255,255))
+            if textwidth < width and textheight < height:
+                texttop = (height - textheight) // 2
+                textleft = (width - textwidth) // 2
+                draw.text((textleft, texttop), text, fill = (255,255,255))
 
-        content = BytesIO()
-        image.save(content, image_format)
-        content.seek(0)
+            content = BytesIO()
+            image.save(content, image_format)
+            content.seek(0)
+            cache.set(key, content, 60 * 60)
+        else:
+            print('Imagen cacheada')
         return content
 
 
