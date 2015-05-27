@@ -9,8 +9,6 @@ DEBUG = os.environ.get('DEBUG','on')  == 'on'
 
 SECRET_KEY = os.environ.get('SECRET_KEY','2%&6s(o0*e$wd)@viy(!7fttu0tm&y3b7db4-wr3h!9nstxaw=')
 
-print(SECRET_KEY)
-
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS','localhost').split(',')
 
 settings.configure(
@@ -38,7 +36,7 @@ from django.conf.urls import url
 from django.http import HttpResponse,HttpResponseBadRequest
 
 from io import BytesIO
-from PIL import Image
+from PIL import Image, ImageDraw
 
 
 class ImageForm(forms.Form):
@@ -51,6 +49,17 @@ class ImageForm(forms.Form):
         height = self.cleaned_data['height']
         width = self.cleaned_data['width']
         image = Image.new('RGB',(width,height))
+        draw = ImageDraw.Draw(image)
+
+        text = '{} X {}'.format(width,height)
+
+        textwidth,textheight = draw.textsize(text)
+
+        if textwidth < width and textheight < height:
+            texttop = (height - textheight) // 2
+            textleft = (width - textwidth) // 2
+            draw.text((textleft, texttop), text, fill = (255,255,255))
+
         content = BytesIO()
         image.save(content, image_format)
         content.seek(0)
