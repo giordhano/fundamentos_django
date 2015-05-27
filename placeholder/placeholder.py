@@ -38,12 +38,18 @@ from django.conf.urls import url
 from django.http import HttpResponse
 
 
+
+
+def placeholder(request, width, height):
+    return HttpResponse('Ok')
+
 def index(request):
     return HttpResponse('Hola estoy vivo')
 
 
 urlpatterns = (
 
+    url(r'^image/(?P<width>[0-9]+)x(?P<height>[0-9]+)/$', placeholder, name='placeholder'),
     url(r'^$',index),
 
 )
