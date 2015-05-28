@@ -1,18 +1,25 @@
 {% load staticfiles %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+
     <title>
-        {% block title %} Prototipo Rapido {% endblock %}
+        {% block title %} Rapid Prototypes {% endblock %}
     </title>
+    
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
 
 </head>
-<body>
+<body id="{% block body-id %}body{% endblock%}">
     {% block content %} {% endblock %}  
+    
+    <script src="{% static 'js/jquery.min.js' %}"> </script>
+    <script src="{% static 'js/bootstrap.min.js' %}"> </script>
+
 </body>
 </html>
