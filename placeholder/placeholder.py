@@ -12,6 +12,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY','2%&6s(o0*e$wd)@viy(!7fttu0tm&y3b7db4-w
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS','localhost').split(',')
 
+BASE_DIR = os.path.dirname(__file__)
+
 settings.configure(
 
     DEBUG = DEBUG,
@@ -30,12 +32,28 @@ settings.configure(
 
     ),
 
+    INSTALLED_APPS = (
+        'django.contrib.staticfiles',
+    ),
+
+    TEMPLATE_DIRS = (
+        os.path.join(BASE_DIR, 'templates'),
+    ),
+
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'static'),
+    ),
+
+    STATIC_URL = '/static/',
+
 )
 
 from django import forms
 from django.conf.urls import url
 from django.core.cache import cache
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse,HttpResponseBadRequest
+from django.shortcuts import render 
 from django.views.decorators.http import etag
 
 from io import BytesIO
@@ -94,7 +112,14 @@ def placeholder(request, width, height):
 
 
 def index(request):
-    return HttpResponse('Hola estoy vivo')
+
+    ejemplo_url = reverse('placeholder', kwargs = {'width' : 50, 'height' : 50 }) 
+
+    context = {
+        'example' : request.build_absolute_uri(ejemplo_url)
+    }
+
+    return render(request, 'home.html', context)
 
 
 urlpatterns = (
