@@ -15,6 +15,7 @@ settings.configure(
         'django.contrib.webdesign', #en django 1.8 solo nos habilita {% lorem %}
         'sitebuilder'
     ),
+
     STATIC_URL = '/static/',
     SITE_PAGES_DIRECTORY = os.path.join(BASE_DIR, 'pages'),
     SITE_OUTPUT_DIRECTORY = os.path.join(BASE_DIR,'_build'),
