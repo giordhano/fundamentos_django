@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load staticfiles  %}
 
 <!DOCTYPE html>
 <html lang="es">
@@ -6,6 +6,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    
+    <meta name="descripcion" content="{{ description|default:'Default description prototype'}}">
 
     <title>
         {% block title %} Rapid Prototypes {% endblock %}
@@ -40,7 +42,11 @@
                     <li {% if slug == 'index' %} class="active" {% endif %} >
                         <a href="/"> Home</a>
                     </li>
-                    
+                     
+                    <li  {% if slug == 'pricing' %} class="active" {% endif %}>
+                            <a href="{% url 'page' 'pricing' %}"> Pricing</a>
+                    </li>
+
                     <li  {% if slug == 'contact' %} class="active" {% endif %}>
                             <a href="{% url 'page' 'contact' %}"> Contacto</a>
                     </li>
